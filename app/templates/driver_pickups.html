@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Driver Dashboard{% endblock %}
+
+{% block content %}
+<div class="mt-4">
+  <h2>Your Assigned Pickups</h2>
+  {% if pickups %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Request ID</th>
+          <th>User</th>
+          <th>PIN</th>
+          <th>Date</th>
+          <th>Time Slot</th>
+          <th>Waste Type</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in pickups %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ p.id }}</td>
+          <td>{{ p.user.username }}<br><small>{{ p.user.email }}</small></td>
+          <td>{{ p.pin_code }}</td>
+          <td>{{ p.pickup_date.strftime('%Y-%m-%d') }}</td>
+          <td>{{ p.time_slot }}</td>
+          <td>{{ p.waste_type.title() }}</td>
+          <td>{{ p.status }}</td>
+          <td>
+            {% if p.status == 'Pending' %}
+              <a href="{{ url_for('driver.update_pickup', pickup_id=p.id, status='On the Way') }}"
+                 class="btn btn-sm btn-primary mb-1">On the Way</a>
+            {% elif p.status == 'On the Way' %}
+              <a href="{{ url_for('driver.update_pickup', pickup_id=p.id, status='Arrived') }}"
+                 class="btn btn-sm btn-info mb-1">Arrived</a>
+            {% elif p.status == 'Arrived' %}
+              <a href="{{ url_for('driver.update_pickup', pickup_id=p.id, status='Completed') }}"
+                 class="btn btn-sm btn-success">Completed</a>
+            {% else %}
+              <span class="text-muted">No actions</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="text-center">No pickups have been assigned to you yet.</p>
+  {% endif %}
+</div>
+{% endblock %}

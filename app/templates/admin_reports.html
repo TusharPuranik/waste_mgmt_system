@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% block title %}Admin – Reports{% endblock %}
+
+{% block content %}
+<div class="mt-4">
+  <h2>Reports</h2>
+
+  <div class="row">
+    <!-- Pickups by Waste Type -->
+    <div class="col-md-6 mb-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Pickups by Waste Type</h5>
+          <div style="position: relative; height: 300px;">
+            <canvas id="pickupChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Complaints by Status -->
+    <div class="col-md-6 mb-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Complaints by Status</h5>
+          <div style="position: relative; height: 300px;">
+            <canvas id="complaintChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js (if not already included in base.html) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const pickupLabels    = {{ pickup_labels   | tojson }};
+  const pickupCounts    = {{ pickup_counts   | tojson }};
+  const complaintLabels = {{ complaint_labels | tojson }};
+  const complaintCounts = {{ complaint_counts | tojson }};
+
+  // Bar chart
+  new Chart(
+    document.getElementById('pickupChart').getContext('2d'),
+    {
+      type: 'bar',
+      data: {
+        labels: pickupLabels,
+        datasets: [{
+          label: 'Number of Pickups',
+          data: pickupCounts
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true, ticks: { precision: 0 } }
+        }
+      }
+    }
+  );
+
+  // Pie chart
+  new Chart(
+    document.getElementById('complaintChart').getContext('2d'),
+    {
+      type: 'pie',
+      data: {
+        labels: complaintLabels,
+        datasets: [{
+          data: complaintCounts
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    }
+  );
+});
+</script>
+{% endblock %}

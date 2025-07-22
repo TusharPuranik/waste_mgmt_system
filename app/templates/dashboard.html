@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="text-center">
+  <h1 class="my-4">Welcome, {{ current_user.username }}!</h1>
+  <p class="lead">This is your dashboard. Use the navigation above to access pickups, complaints, tracking, and more.</p>
+  <!-- Future: add cards, charts, summaries here -->
+</div>
+{% endblock %}

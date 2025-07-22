@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Request Pickup{% endblock %}
+
+{% block content %}
+<div class="mt-4" style="max-width: 600px; margin: auto;">
+  <h2 class="mb-4">Schedule a Waste Pickup</h2>
+  <form method="POST" action="">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      {{ form.pin_code.label(class="form-label") }}
+      {{ form.pin_code(class="form-control", placeholder="Enter your PIN code") }}
+      {% for error in form.pin_code.errors %}
+        <div class="text-danger small">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="mb-3">
+      {{ form.waste_type.label(class="form-label") }}
+      {{ form.waste_type(class="form-select") }}
+      {% for error in form.waste_type.errors %}
+        <div class="text-danger small">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="mb-3">
+      {{ form.pickup_date.label(class="form-label") }}
+      {{ form.pickup_date(class="form-control", min=min_date) }}
+      {% for error in form.pickup_date.errors %}
+        <div class="text-danger small">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="mb-3">
+      {{ form.time_slot.label(class="form-label") }}
+      {{ form.time_slot(class="form-select") }}
+      {% for error in form.time_slot.errors %}
+        <div class="text-danger small">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <button type="submit" class="btn btn-success w-100">
+      {{ form.submit.label.text }}
+    </button>
+  </form>
+  {% if pickups %}
+<div class="mt-5">
+  <h3>Your Scheduled Pickups</h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>PIN Code</th>
+        <th>Waste Type</th>
+        <th>Date</th>
+        <th>Time Slot</th>
+        <th>Status</th>
+        <th>Requested At</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in pickups %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ p.pin_code }}</td>
+        <td>{{ p.waste_type.title() }}</td>
+        <td>{{ p.pickup_date.strftime('%Y-%m-%d') }}</td>
+        <td>{{ p.time_slot }}</td>
+        <td>{{ p.status }}</td>
+        <td>{{ p.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+</div>
+{% endblock %}

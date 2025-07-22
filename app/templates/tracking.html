@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Track My Pickups{% endblock %}
+
+{% block content %}
+<div class="mt-4">
+  <h2>My Pickup Status</h2>
+
+  {% if pickups %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Time Slot</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in pickups %}
+        <tr>
+          <td>{{ p.id }}</td>
+          <td>{{ p.pickup_date.strftime('%Y-%m-%d') }}</td>
+          <td>{{ p.time_slot }}</td>
+          <td>{{ p.status }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>You have no scheduled pickups yet.</p>
+  {% endif %}
+</div>
+{% endblock %}
